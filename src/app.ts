@@ -2,13 +2,13 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./router";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import "dotenv/config";
+import { sequelize } from "./database";
 
 const app = express();
 
 const PORT: number = parseInt(process.env.PORT as string, 10) || 5000;
+const HOST: string = process.env.HOST || "localhost";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +26,19 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use(cors(options));
-app.listen(PORT, () => {
-  console.log(`server on`);
+app.listen(PORT, HOST, async () => {
+  console.log(`Server Listening on ${HOST}:${PORT}`);
+  sequelize
+    .authenticate()
+    .then(async () => {
+      console.log("database connected");
+      try {
+        await sequelize.sync({ force: false });
+      } catch (e) {
+        console.log(e.message);
+      }
+    })
+    .catch((e: any) => {
+      console.log(e.message);
+    });
 });
