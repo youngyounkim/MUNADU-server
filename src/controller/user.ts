@@ -1,29 +1,10 @@
 import { Request, Response } from "express";
 import Users from "../model/Users";
+import { generateAccessToken, generateRefreshToken } from "./auth";
 
 export const userId = async (req: Request, res: Response) => {
   try {
     res.status(200).send("working...");
-    await Users.bulkCreate([
-      {
-        name: "kimcoding",
-        email: "kimcoding@codestates.com",
-        password: "1234",
-        img: "image",
-        address: "codestates",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "parkhacker",
-        email: "parkhacker@codestates.com",
-        password: "1234",
-        img: "image",
-        address: "codestates",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ]);
   } catch (e) {
     console.log(e.message);
   }
