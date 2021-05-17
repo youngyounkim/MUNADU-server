@@ -11,6 +11,7 @@ import {
 } from "sequelize-typescript";
 import Comments from "./Comments";
 import Martials from "./Martials";
+import Reviews from "./Reviews";
 import Reviews_Replies from "./Reviews_Replies";
 import Users_Martials from "./Users_Martials";
 
@@ -60,6 +61,9 @@ export default class Users extends Model implements UsersI {
 
   @HasMany(() => Comments)
   comments!: Comments[];
+
+  @HasMany(() => Reviews)
+  reviews!: Reviews[];
 
   @HasMany(() => Reviews_Replies)
   reviews_replies!: Reviews_Replies[];

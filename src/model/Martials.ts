@@ -115,3 +115,6 @@ export default class Martials extends Model implements MartialsI {
   @BelongsToMany(() => Users, () => Users_Martials)
   users!: Users[];
 }
+
+//User - Review
+//Review_repelies - martial
