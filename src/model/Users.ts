@@ -47,6 +47,11 @@ export default class Users extends Model implements UsersI {
   @AllowNull(false)
   @NotEmpty
   @Column
+  salt!: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
   email!: string;
 
   @AllowNull(false)
