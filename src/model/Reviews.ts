@@ -12,6 +12,7 @@ import {
 } from "sequelize-typescript";
 import Martials from "./Martials";
 import Reviews_Replies from "./Reviews_Replies";
+import Users from "./Users";
 
 export interface ReviewsI {
   id?: number | null;
@@ -82,6 +83,13 @@ export default class Reviews extends Model implements ReviewsI {
   @Column
   Martials_id!: number;
 
+  @ForeignKey(() => Users)
+  @Column
+  Users_id!: number;
+
   @BelongsTo(() => Martials)
   martials!: Martials;
+
+  @BelongsTo(() => Users)
+  users!: Users;
 }

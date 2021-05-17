@@ -25,7 +25,7 @@ export default class Users_Martials extends Model implements Users_MartialsI {
 
   @ForeignKey(() => Users)
   @Column
-  Users_id?: number;
+  Users_id!: number;
 
   @ForeignKey(() => Martials)
   @Column

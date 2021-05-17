@@ -27,6 +27,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use(cors(options));
 app.listen(PORT, HOST, async () => {
+  console.log(process.env.DB_USERNAME);
   console.log(`Server Listening on ${HOST}:${PORT}`);
   sequelize
     .authenticate()

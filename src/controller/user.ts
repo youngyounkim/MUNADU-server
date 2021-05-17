@@ -1,10 +1,31 @@
 import { Request, Response } from "express";
+import Users from "../model/Users";
 
-export const userId = (req: Request, res: Response) => {
+export const userId = async (req: Request, res: Response) => {
   try {
     res.status(200).send("working...");
+    await Users.bulkCreate([
+      {
+        name: "kimcoding",
+        email: "kimcoding@codestates.com",
+        password: "1234",
+        img: "image",
+        address: "codestates",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: "parkhacker",
+        email: "parkhacker@codestates.com",
+        password: "1234",
+        img: "image",
+        address: "codestates",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
   } catch (e) {
-    console.log("error...");
+    console.log(e.message);
   }
 };
 export const signin = (req: Request, res: Response) => {
