@@ -8,14 +8,33 @@ import {
   sendAccessToken,
   sendRefreshToken,
   createhashedPassword,
+  isAuthorized,
 } from "./auth";
 
-
-export const userId = async (req: Request, res: Response) => {
+export const userinfo = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
+    const userData = await Users.findOne({
+      where: {
+        id: req.url.split("/info/")[1],
+      },
+    });
+    if (userData) {
+      const { id, name, email, img, address } = userData;
+      res.status(200).send({
+        date: {
+          id,
+          name,
+          email,
+          img,
+          address,
+        },
+        message: "ok",
+      });
+    } else {
+      res.status(403).send("Invalid user id");
+    }
   } catch (e) {
-    console.log(e.message);
+    res.status(403).send("Invalid user id");
   }
 };
 export const signin = async (req: Request, res: Response) => {
