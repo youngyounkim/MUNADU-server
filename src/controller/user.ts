@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Users from "../model/Users";
+
 import {
   createSalt,
   generateAccessToken,
@@ -8,6 +9,7 @@ import {
   sendRefreshToken,
   createhashedPassword,
 } from "./auth";
+
 
 export const userId = async (req: Request, res: Response) => {
   try {
@@ -30,6 +32,7 @@ export const signout = (req: Request, res: Response) => {
     console.log("error...");
   }
 };
+
 export const signup = async (req: Request, res: Response) => {
   try {
     const { name, password, email } = req.body;

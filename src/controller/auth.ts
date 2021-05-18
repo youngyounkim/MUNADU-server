@@ -3,6 +3,7 @@ import { verify, sign } from "jsonwebtoken";
 import "dotenv/config";
 import crypto from "crypto";
 
+
 export const generateAccessToken = (data: any) => {
   return sign(data, process.env.ACCESS_SECRET!, { expiresIn: "1d" });
 };
