@@ -6,6 +6,7 @@ import Users_Martials from "./model/Users_Martials";
 import Users from "./model/Users";
 import Channels from "./model/Channels";
 import { sequelize } from "./database";
+import { martialData } from "./martialData.json";
 
 const userSeed = async () => {
   sequelize.authenticate().then(async () => {
@@ -16,7 +17,7 @@ const userSeed = async () => {
           email: "ryujaecheon@codestates.com",
           password: "1234",
           salt: "1234",
-          img: "image",
+          img: "",
           address: "codestates",
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -50,38 +51,7 @@ const userSeed = async () => {
 const martialSeed = async () => {
   sequelize.authenticate().then(async () => {
     try {
-      await Martials.bulkCreate([
-        {
-          name: "WTF 태권도",
-          weapon: 0,
-          uniform: 0,
-          origin: 0,
-          sports: 0,
-          manner: 0,
-          attack: 0,
-          nation: "대한민국",
-          caption: "대한민국의 국기이자 국제공인스포츠",
-          video: "https://www.youtube.com/watch?v=hWzjtwjNgd8",
-          kcal: 514,
-          img: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FTaekwondo&psig=AOvVaw3fh_oBw2s2cAW6iFK3XQPc&ust=1620959851856000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKDT-ZLQxfACFQAAAAAdAAAAABAD",
-          wiki: "https://namu.wiki/w/%EC%84%B8%EA%B3%84%ED%83%9C%EA%B6%8C%EB%8F%84%EC%97%B0%EB%A7%B9",
-        },
-        {
-          name: "ITF 태권도",
-          weapon: 0,
-          uniform: 0,
-          origin: 0,
-          sports: 1,
-          manner: 0,
-          attack: 0,
-          nation: "대한민국",
-          caption: "한국의 실전 무예 태권도",
-          video: "https://www.youtube.com/watch?v=doLgDKo00MY",
-          kcal: 514,
-          img: "not yet",
-          wiki: "https://namu.wiki/w/%EA%B5%AD%EC%A0%9C%ED%83%9C%EA%B6%8C%EB%8F%84%EC%97%B0%EB%A7%B9?from=ITF%20%ED%83%9C%EA%B6%8C%EB%8F%84",
-        },
-      ]);
+      await Martials.bulkCreate(martialData);
     } catch (e) {
       console.log(e.message);
     }
@@ -234,10 +204,14 @@ const channelSeed = async () => {
   });
 };
 
-userSeed();
-martialSeed();
-reviewSeed();
-userMartialsSeed();
-commentSeed();
-reviewRepliesSeed();
-channelSeed();
+const setData = async () => {
+  await userSeed();
+  await martialSeed();
+  await reviewSeed();
+  await userMartialsSeed();
+  await commentSeed();
+  await reviewRepliesSeed();
+  await channelSeed();
+};
+
+setData();
