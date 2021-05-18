@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { verify, sign } from "jsonwebtoken";
 import "dotenv/config";
+import crypto from "crypto";
+
 
 export const generateAccessToken = (data: any) => {
   return sign(data, process.env.ACCESS_SECRET!, { expiresIn: "1d" });
@@ -37,4 +39,14 @@ export const checkRefreshToken = (refreshToken: string) => {
   } catch (e) {
     return null;
   }
+};
+
+export const createSalt = () => {
+  return crypto.randomBytes(64).toString("base64");
+};
+
+export const createhashedPassword = (password: string, salt: string) => {
+  return crypto
+    .pbkdf2Sync(password, salt, 103523, 64, "sha512")
+    .toString("base64");
 };
