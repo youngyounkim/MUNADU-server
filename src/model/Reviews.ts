@@ -19,7 +19,7 @@ export interface ReviewsI {
   period: number;
   comment: string;
   score: number;
-  parcticality: number;
+  practicality: number;
   muscle: number;
   difficulty: number;
   intensity: number;
@@ -54,7 +54,7 @@ export default class Reviews extends Model implements ReviewsI {
   @AllowNull(false)
   @NotEmpty
   @Column
-  parcticality!: number;
+  practicality!: number;
 
   @AllowNull(false)
   @NotEmpty
