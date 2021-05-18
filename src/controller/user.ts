@@ -18,13 +18,41 @@ export const userId = async (req: Request, res: Response) => {
     console.log(e.message);
   }
 };
-export const signin = (req: Request, res: Response) => {
+export const signin = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(403).send("Invalid user email or password");
+    }
+    const userData = await Users.findOne({
+      where: {
+        email,
+      },
+    });
+    if (userData) {
+      const hashedPsw = createhashedPassword(password, userData.salt);
+      if (hashedPsw !== userData.password) {
+        res.status(403).send("Invalid user password");
+      }
+      const accessToken = generateAccessToken({
+        id: userData.id,
+        email: userData.email,
+      });
+      const refreshToken = generateRefreshToken({
+        id: userData.id,
+        email: userData.email,
+      });
+      sendRefreshToken(res, refreshToken);
+      sendAccessToken(res, 200, accessToken);
+    } else {
+      res.status(403).send("Invalid user email");
+    }
   } catch (e) {
-    console.log("error...");
+    res.status(403).send("Invalid user email or password");
   }
 };
+
 export const signout = (req: Request, res: Response) => {
   try {
     res.status(200).send("working...");
@@ -61,6 +89,7 @@ export const signup = async (req: Request, res: Response) => {
     res.status(422).send("insufficient parameters supplied");
   }
 };
+
 export const edit = (req: Request, res: Response) => {
   try {
     res.status(200).send("working...");
