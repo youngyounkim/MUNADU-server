@@ -15,11 +15,23 @@ export const reviewList = async (req: Request, res: Response) => {
     });
   }
 };
-export const userList = (req: Request, res: Response) => {
+
+// ? 특정 사용자가 작성한 모든 댓글리스트 읽기.
+export const userList = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).json({message: "Invalid Access Token"});
+  //   return;
+  // }
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log("error...");
+    const data = await Reviews_Replies.findAll({
+      where: { Users_id: req.params.userid },
+    });
+    res.status(200).json({ data: data, message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
 
