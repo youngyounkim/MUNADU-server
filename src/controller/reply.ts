@@ -57,10 +57,28 @@ export const deleteReply = async (req: Request, res: Response) => {
     });
   }
 };
-export const update = (req: Request, res: Response) => {
+
+// ? 리뷰에 있는 댓글 수정
+export const update = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).json({message: "Invalid Access Token"});
+  //   return;
+  // }
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log(e);
+    const { comment, replyId } = req.body;
+    const data = await Reviews_Replies.update(
+      {
+        comment: comment,
+      },
+      {
+        where: { id: replyId },
+      }
+    );
+    res.status(201).json({ message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
