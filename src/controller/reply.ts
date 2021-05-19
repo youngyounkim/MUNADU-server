@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
 import Reviews_Replies from "../model/Reviews_Replies";
 
-export const reviewList = (req: Request, res: Response) => {
+// ? 리뷰에 달린 댓글리스트 읽기
+export const reviewList = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log("error...");
+    const data = await Reviews_Replies.findAll({
+      where: { Reviews_id: req.params.reviewid },
+    });
+    res.status(200).json({ data: data, message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
 export const userList = (req: Request, res: Response) => {
