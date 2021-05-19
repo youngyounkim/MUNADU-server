@@ -16,7 +16,7 @@ export const reviewList = async (req: Request, res: Response) => {
   }
 };
 
-// ? 특정 사용자가 작성한 모든 댓글리스트 읽기
+// ? 특정 사용자가 작성한 모든 댓글리스트 읽기.
 export const userList = async (req: Request, res: Response) => {
   // if (!isAuthorized(req)) {
   //   res.status(403).json({message: "Invalid Access Token"});
