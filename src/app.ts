@@ -17,10 +17,10 @@ app.use(cookieParser());
 const options: cors.CorsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
-  methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-  // maxAge: 86400,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
 app.use(cors(options));
+
 app.use(router);
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("무나두 스타트");
