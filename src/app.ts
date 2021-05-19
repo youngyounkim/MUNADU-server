@@ -15,12 +15,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const options: cors.CorsOptions = {
-  origin: "http://localhost:3000",
+  origin: true,
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
 app.use(cors(options));
-
+app.use(express.static("public"));
 app.use(router);
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("무나두 스타트");

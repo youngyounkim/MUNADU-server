@@ -1,3 +1,4 @@
+import { update } from "./comment";
 import { Request, Response } from "express";
 import Users from "../model/Users";
 
@@ -114,9 +115,69 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
-export const edit = (req: Request, res: Response) => {
+export const edit = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
+    const tokenData: any = isAuthorized(req);
+    if (!tokenData) {
+      res.status(403).send("Invalid access Token");
+    } else {
+      if (req.body.name) {
+        await Users.update(
+          { name: req.body.name },
+          {
+            where: {
+              id: tokenData.id,
+            },
+          }
+        );
+      }
+      if (req.body.address) {
+        await Users.update(
+          {
+            address: req.body.address,
+          },
+          {
+            where: {
+              id: tokenData.id,
+            },
+          }
+        );
+      }
+      res.status(200).send("uploadData");
+    }
+  } catch (e) {
+    res.status(403).send("Invalid access Token");
+  }
+};
+
+export const editimg = async (req: Request, res: Response) => {
+  try {
+    const tokenData: any = isAuthorized(req);
+    if (!tokenData) {
+      res.status(403).send("Invalid access Token");
+    } else {
+      console.log(`req.file.path`, req.file);
+      if (req.file.path) {
+        await Users.update(
+          {
+            img: req.file.path,
+          },
+          {
+            where: {
+              id: tokenData.id,
+            },
+          }
+        );
+        res.status(200).send({
+          data: {
+            path: req.file.path,
+          },
+          messeage: "Success change profile",
+        });
+      } else {
+        res.status(403).send("no frofile");
+      }
+    }
   } catch (e) {
     console.log("error...");
   }
