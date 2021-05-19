@@ -23,10 +23,10 @@ export const userList = async (req: Request, res: Response) => {
   }
 };
 export const create = async (req: Request, res: Response) => {
-  // if (!isAuthorized(req)) {
-  //   res.status(403).json({ message: "Invalid Access Token" });
-  //   return;
-  // }
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
     const { comment, userid, martialid } = req.body;
     const createData = await Comments.create({
@@ -42,6 +42,10 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 export const deleteComment = async (req: Request, res: Response) => {
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
     const { commentid } = req.body;
     const findData = await Comments.findOne({ where: { id: commentid } });
