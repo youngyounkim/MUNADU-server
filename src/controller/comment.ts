@@ -13,10 +13,10 @@ export const martialList = async (req: Request, res: Response) => {
 };
 export const userList = async (req: Request, res: Response) => {
   try {
-    const commentsData = await Comments.findAll({
+    const commentsUserData = await Comments.findAll({
       where: { Users_id: req.params.userid },
     });
-    res.status(200).json({ data: commentsData, message: "ok" });
+    res.status(200).json({ data: commentsUserData, message: "ok" });
   } catch (e) {
     res.status(404).json({ message: "Not Found" });
   }
