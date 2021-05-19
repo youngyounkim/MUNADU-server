@@ -99,10 +99,43 @@ export const deleteReview = async (req: Request, res: Response) => {
     });
   }
 };
-export const update = (req: Request, res: Response) => {
+
+// ? 본인이 남김 리뷰의 8가지 항목을 수정합니다.
+export const update = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).send("Invalid Access Token");
+  //   return;
+  // }
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log("error...");
+    const {
+      score,
+      practicality,
+      muscle,
+      difficulty,
+      intensity,
+      injury,
+      period,
+      comment,
+      reviewId,
+    } = req.body;
+    const data = await Reviews.update(
+      {
+        score: score,
+        practicality: practicality,
+        muscle: muscle,
+        difficulty: difficulty,
+        intensity: intensity,
+        injury: injury,
+        period: period,
+        comment: comment,
+      },
+      { where: { id: reviewId } }
+    );
+    res.status(201).json({ message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
