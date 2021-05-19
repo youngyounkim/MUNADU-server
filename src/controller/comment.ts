@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Comments from "../model/Comments";
+import { isAuthorized } from "./auth";
 
 export const martialList = async (req: Request, res: Response) => {
   try {
@@ -21,11 +22,23 @@ export const userList = async (req: Request, res: Response) => {
     res.status(404).json({ message: "Not Found" });
   }
 };
-export const create = (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
-    res.status(200).send("working...");
+    const { comment, userid, martialid } = req.body;
+    const createData = await Comments.create({
+      comment,
+      Users_id: userid,
+      Martials_id: martialid,
+    });
+    res
+      .status(201)
+      .json({ data: { Comments_id: createData.id }, message: "created" });
   } catch (e) {
-    console.log("error...");
+    res.status(404).json({ message: "Not Found" });
   }
 };
 export const deleteComment = (req: Request, res: Response) => {
