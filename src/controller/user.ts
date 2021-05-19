@@ -18,6 +18,7 @@ export const userinfo = async (req: Request, res: Response) => {
         id: req.url.split("/info/")[1],
       },
     });
+    console.log(`req.url`, req.url);
     if (userData) {
       const { id, name, email, img, address } = userData;
       res.status(200).send({
@@ -74,9 +75,13 @@ export const signin = async (req: Request, res: Response) => {
 
 export const signout = (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
+    if (!isAuthorized(req)) {
+      res.status(403).send("Invalid access Token");
+    } else {
+      res.status(200).send("Success logout");
+    }
   } catch (e) {
-    console.log("error...");
+    res.status(403).send("Fail logout");
   }
 };
 
