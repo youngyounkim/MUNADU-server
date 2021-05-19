@@ -37,11 +37,24 @@ export const create = async (req: Request, res: Response) => {
     });
   }
 };
-export const deleteReply = (req: Request, res: Response) => {
+
+// ? 리뷰에 있는 댓글 삭제.
+export const deleteReply = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).json({message: "Invalid Access Token"});
+  //   return;
+  // }
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log(e);
+    const { replyId } = req.body;
+    const data = await Reviews_Replies.destroy({
+      where: { id: replyId },
+    });
+    res.status(200).json({ message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
 export const update = (req: Request, res: Response) => {
