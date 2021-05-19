@@ -23,10 +23,10 @@ export const userList = async (req: Request, res: Response) => {
   }
 };
 export const create = async (req: Request, res: Response) => {
-  if (!isAuthorized(req)) {
-    res.status(403).json({ message: "Invalid Access Token" });
-    return;
-  }
+  // if (!isAuthorized(req)) {
+  //   res.status(403).json({ message: "Invalid Access Token" });
+  //   return;
+  // }
   try {
     const { comment, userid, martialid } = req.body;
     const createData = await Comments.create({
@@ -41,11 +41,19 @@ export const create = async (req: Request, res: Response) => {
     res.status(404).json({ message: "Not Found" });
   }
 };
-export const deleteComment = (req: Request, res: Response) => {
+export const deleteComment = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
+    const { commentid } = req.body;
+    const findData = await Comments.findOne({ where: { id: commentid } });
+    if (!findData) {
+      res.status(404).json({ message: "Not Found" });
+    }
+    const data = await Comments.destroy({
+      where: { id: commentid },
+    });
+    res.status(200).json({ message: "ok" });
   } catch (e) {
-    console.log(e);
+    res.status(404).json({ message: "Not Found" });
   }
 };
 export const update = (req: Request, res: Response) => {
