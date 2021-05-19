@@ -38,7 +38,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
-// ? 리뷰에 있는 댓글 삭제
+// ? 리뷰에 있는 댓글 삭제.
 export const deleteReply = async (req: Request, res: Response) => {
   // if (!isAuthorized(req)) {
   //   res.status(403).json({message: "Invalid Access Token"});
