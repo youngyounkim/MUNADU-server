@@ -12,30 +12,33 @@ export const martialList = async (req: Request, res: Response) => {
     console.log(`data`, data);
     res.status(200).json({ data: data, message: "ok" });
   } catch (err) {
+    console.log(`err`, err);
     res.status(404).json({
       message: "Not Found",
     });
   }
 };
-export const userList = (req: Request, res: Response) => {
+
+// ? 로그인한 사용자가 남긴 리뷰리스트를 불러옵니다.
+export const userList = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).send("Invalid Access Token");
+  //   return;
+  // }
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log("error...");
+    const data = await Reviews.findAll({
+      where: { Users_id: req.params.userid },
+    });
+    res.status(200).json({ data: data, message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
-interface CreateProps {
-  period: number;
-  comment: string;
-  score: number;
-  practicality: number;
-  muscle: number;
-  difficulty: number;
-  intensity: number;
-  injury: number;
-  Martial_id?: number;
-  Users_id?: number;
-}
+
+// ? 새로운 리뷰를 생성합니다.
 export const create = async (req: Request, res: Response) => {
   // if (!isAuthorized(req)) {
   //   res.status(403).send("Invalid Access Token");
@@ -76,11 +79,24 @@ export const create = async (req: Request, res: Response) => {
     });
   }
 };
-export const deleteReview = (req: Request, res: Response) => {
+
+// ? 본인이 남긴 리뷰를 삭제합니다.
+export const deleteReview = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).send("Invalid Access Token");
+  //   return;
+  // }
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log(e);
+    const { reviewId } = req.body;
+    const data = await Reviews.destroy({
+      where: { id: reviewId },
+    });
+    res.status(200).json({ message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
 export const update = (req: Request, res: Response) => {
