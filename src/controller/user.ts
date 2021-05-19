@@ -179,6 +179,24 @@ export const editimg = async (req: Request, res: Response) => {
       }
     }
   } catch (e) {
-    console.log("error...");
+    res.status(403).send("no frofile");
+  }
+};
+
+export const userdelete = async (req: Request, res: Response) => {
+  try {
+    const tokenData: any = isAuthorized(req);
+    if (!tokenData) {
+      res.status(403).send("Invalid access Token");
+    } else {
+      await Users.destroy({
+        where: {
+          id: tokenData.id,
+        },
+      });
+      res.status(200).send("Delete userinfo");
+    }
+  } catch (e) {
+    res.status(403).send("Fail Delete userinfo");
   }
 };

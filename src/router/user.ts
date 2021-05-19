@@ -22,5 +22,6 @@ userRouter.post("/signup", user.signup);
 userRouter.get("/signout", user.signout);
 userRouter.put("/edit", user.signout);
 userRouter.put("/editimg", upload.single("image"), user.editimg);
+userRouter.delete("/userdelete", user.userdelete);
 
 export default userRouter;
