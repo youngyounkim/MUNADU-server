@@ -3,11 +3,18 @@ import { fileURLToPath } from "url";
 import { isAuthorized } from "./auth";
 import Reviews from "../model/Reviews";
 
-export const martialList = (req: Request, res: Response) => {
+// ? 해당 무술에 달린 모든 리뷰 리스트를 불러옵니다.
+export const martialList = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
-  } catch (e) {
-    console.log("error...");
+    const data = await Reviews.findAll({
+      where: { Martials_id: req.params.martialid },
+    });
+    console.log(`data`, data);
+    res.status(200).json({ data: data, message: "ok" });
+  } catch (err) {
+    res.status(404).json({
+      message: "Not Found",
+    });
   }
 };
 export const userList = (req: Request, res: Response) => {
@@ -30,10 +37,10 @@ interface CreateProps {
   Users_id?: number;
 }
 export const create = async (req: Request, res: Response) => {
-  if (!isAuthorized(req)) {
-    res.status(403).send("Invalid Access Token");
-    return;
-  }
+  // if (!isAuthorized(req)) {
+  //   res.status(403).send("Invalid Access Token");
+  //   return;
+  // }
   try {
     const {
       period,
