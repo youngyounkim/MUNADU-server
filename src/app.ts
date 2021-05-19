@@ -17,15 +17,15 @@ app.use(cookieParser());
 const options: cors.CorsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
-  methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
+app.use(cors(options));
 
 app.use(router);
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("무나두 스타트");
 });
 
-app.use(cors(options));
 app.listen(PORT, HOST, async () => {
   console.log(`Server Listening on ${HOST}:${PORT}`);
   sequelize
