@@ -39,7 +39,7 @@ export const bookmark = async (req: Request, res: Response) => {
 };
 export const bookmarkCreate = async (req: Request, res: Response) => {
   if (!isAuthorized(req)) {
-    res.status(403).send({ message: "Invalid Access Token" });
+    res.status(403).json({ message: "Invalid Access Token" });
   }
   try {
     const { Users_id, Martials_id } = req.body;
@@ -47,7 +47,7 @@ export const bookmarkCreate = async (req: Request, res: Response) => {
       Users_id,
       Martials_id,
     });
-    res.status(201).send({ message: "Created" });
+    res.status(201).json({ message: "Created" });
   } catch (e) {
     res.status(404).json({ message: "Not Found" });
   }
@@ -69,7 +69,7 @@ export const rank = async (req: Request, res: Response) => {
         [Op.or]: [{ id: ranked[0] }, { id: ranked[1] }, { id: ranked[2] }],
       },
     });
-    res.status(200).send({ data: resultData, message: "ok" });
+    res.status(200).json({ data: resultData, message: "ok" });
   } catch (e) {
     res.status(404).json({ message: "Not Found" });
   }
