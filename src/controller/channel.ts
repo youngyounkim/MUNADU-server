@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
+import Channels from "../model/Channels";
 
-export const channel = (req: Request, res: Response) => {
+export const channel = async (req: Request, res: Response) => {
   try {
-    res.status(200).send("working...");
+    const channelData = await Channels.findAll();
+    res.status(200).json({ data: channelData, message: "ok" });
   } catch (e) {
-    console.log("error...");
+    res.status(404).json({ message: "ok" });
   }
 };
