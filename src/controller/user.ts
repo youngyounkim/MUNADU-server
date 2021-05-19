@@ -179,6 +179,6 @@ export const editimg = async (req: Request, res: Response) => {
       }
     }
   } catch (e) {
-    console.log("error...");
+    res.status(403).send("no frofile");
   }
 };
