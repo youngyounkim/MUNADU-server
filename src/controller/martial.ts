@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { truncate } from "fs";
 import Martials from "../model/Martials";
 import Users from "../model/Users";
+import Users_Martials from "../model/Users_Martials";
 import { isAuthorized } from "./auth";
 
 export const info = async (req: Request, res: Response) => {
@@ -13,9 +14,9 @@ export const info = async (req: Request, res: Response) => {
   }
 };
 export const bookmark = async (req: Request, res: Response) => {
-  // if (!isAuthorized(req)) {
-  //   res.status(403).send({ message: "Invalid Access Token" });
-  // }
+  if (!isAuthorized(req)) {
+    res.status(403).send({ message: "Invalid Access Token" });
+  }
   try {
     const userMatialData = await Users.findOne({
       where: { id: req.params.userid },
@@ -34,11 +35,20 @@ export const bookmark = async (req: Request, res: Response) => {
     res.status(404).json({ message: "Not Found" });
   }
 };
-export const bookmarkCreate = (req: Request, res: Response) => {
+export const bookmarkCreate = async (req: Request, res: Response) => {
+  // if (!isAuthorized(req)) {
+  //   res.status(403).send({ message: "Invalid Access Token" });
+  // }
   try {
-    res.status(200).send("working...");
+    const { Users_id, Martials_id } = req.body;
+    const createData = await Users_Martials.create({
+      Users_id,
+      Martials_id,
+    });
+    res.status(201).send({ message: "Created" });
   } catch (e) {
-    console.log("error...");
+    console.log(e.message);
+    res.status(404).json({ message: "Not Found" });
   }
 };
 export const rank = (req: Request, res: Response) => {
