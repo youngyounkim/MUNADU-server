@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user = __importStar(require("../controller/user"));
 const userRouter = express_1.Router();
-userRouter.get("/info/:userid", user.userId);
+userRouter.get("/info/:userid", user.userinfo);
 userRouter.post("/signin", user.signin);
 userRouter.post("/signup", user.signup);
 userRouter.get("/signout", user.signout);

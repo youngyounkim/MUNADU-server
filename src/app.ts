@@ -23,7 +23,7 @@ app.use(cors(options));
 
 app.use(router);
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).send("무나두 스타트");
+  res.status(200).send("Hello world");
 });
 
 app.listen(PORT, HOST, async () => {
