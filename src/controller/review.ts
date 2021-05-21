@@ -21,10 +21,10 @@ export const martialList = async (req: Request, res: Response) => {
 
 // ? 로그인한 사용자가 남긴 리뷰리스트를 불러옵니다.
 export const userList = async (req: Request, res: Response) => {
-  // if (!isAuthorized(req)) {
-  //   res.status(403).json({message: "Invalid Access Token"});
-  //   return;
-  // }
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
     const data = await Reviews.findAll({
       where: { Users_id: req.params.userid },
@@ -40,10 +40,10 @@ export const userList = async (req: Request, res: Response) => {
 
 // ? 새로운 리뷰를 생성합니다.
 export const create = async (req: Request, res: Response) => {
-  // if (!isAuthorized(req)) {
-  //   res.status(403).json({message: "Invalid Access Token"});
-  //   return;
-  // }
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
     const {
       period,
@@ -82,10 +82,10 @@ export const create = async (req: Request, res: Response) => {
 
 // ? 본인이 남긴 리뷰를 삭제합니다.
 export const deleteReview = async (req: Request, res: Response) => {
-  // if (!isAuthorized(req)) {
-  //   res.status(403).json({message: "Invalid Access Token"});
-  //   return;
-  // }
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
     const { reviewId } = req.body;
     const data = await Reviews.destroy({
@@ -102,10 +102,10 @@ export const deleteReview = async (req: Request, res: Response) => {
 
 // ? 본인이 남김 리뷰의 8가지 항목을 수정합니다.
 export const update = async (req: Request, res: Response) => {
-  // if (!isAuthorized(req)) {
-  //   res.status(403).json({message: "Invalid Access Token"});
-  //   return;
-  // }
+  if (!isAuthorized(req)) {
+    res.status(403).json({ message: "Invalid Access Token" });
+    return;
+  }
   try {
     const {
       score,
