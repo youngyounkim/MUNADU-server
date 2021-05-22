@@ -64,8 +64,9 @@ export const signin = async (req: Request, res: Response) => {
         id: userData.id,
         email: userData.email,
       });
+      console.log(`유저 아이디`, userData.id);
       sendRefreshToken(res, refreshToken);
-      sendAccessToken(res, 200, accessToken);
+      sendAccessToken(res, 200, accessToken, userData.id);
     } else {
       res.status(403).send("Invalid user email");
     }
