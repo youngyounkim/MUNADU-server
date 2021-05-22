@@ -3,7 +3,6 @@ import { verify, sign } from "jsonwebtoken";
 import "dotenv/config";
 import crypto from "crypto";
 
-
 export const generateAccessToken = (data: any) => {
   return sign(data, process.env.ACCESS_SECRET!, { expiresIn: "1d" });
 };
@@ -13,9 +12,10 @@ export const generateRefreshToken = (data: any) => {
 export const sendAccessToken = (
   res: Response,
   statusCode: number,
-  accessToken: any
+  accessToken: any,
+  id: number | undefined
 ) => {
-  res.status(statusCode).json({ data: { accessToken }, message: "ok" });
+  res.status(statusCode).json({ data: { accessToken, id }, message: "ok" });
 };
 export const sendRefreshToken = (res: Response, refreshToken: string) => {
   res.cookie("refreshToken", refreshToken, { httpOnly: true });
