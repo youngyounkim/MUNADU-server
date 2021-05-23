@@ -21,7 +21,7 @@ export const userinfo = async (req: Request, res: Response) => {
     if (userData) {
       const { id, name, email, img, address } = userData;
       res.status(200).send({
-        date: {
+        data: {
           id,
           name,
           email,
