@@ -20,7 +20,7 @@ export interface UsersI {
   name: string;
   password: string;
   email: string;
-  img: Buffer;
+  img: string;
   address: string;
 }
 
@@ -57,7 +57,7 @@ export default class Users extends Model implements UsersI {
   @AllowNull(false)
   @NotEmpty
   @Column
-  img!: Buffer;
+  img!: string;
 
   @AllowNull(false)
   @NotEmpty

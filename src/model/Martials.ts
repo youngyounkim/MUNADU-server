@@ -27,7 +27,7 @@ export interface MartialsI {
   caption: string;
   video: string;
   kcal: number;
-  img: Buffer;
+  img: string;
   wiki: string;
 }
 
@@ -99,7 +99,7 @@ export default class Martials extends Model implements MartialsI {
   @AllowNull(false)
   @NotEmpty
   @Column
-  img!: Buffer;
+  img!: string;
 
   @AllowNull(false)
   @NotEmpty
