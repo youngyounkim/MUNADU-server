@@ -2,12 +2,19 @@ import { Request, Response } from "express";
 import { fileURLToPath } from "url";
 import { isAuthorized } from "./auth";
 import Reviews from "../model/Reviews";
+import Users from "../model/Users";
+import sequelize from "sequelize";
 
 // ? 해당 무술에 달린 모든 리뷰 리스트를 불러옵니다.
 export const martialList = async (req: Request, res: Response) => {
   try {
     const data = await Reviews.findAll({
       where: { Martials_id: req.params.martialid },
+      include: {
+        model: Users,
+        attributes: ["name"],
+        where: { id: sequelize.col("Users_id") },
+      },
     });
     console.log(`data`, data);
     res.status(200).json({ data: data, message: "ok" });
