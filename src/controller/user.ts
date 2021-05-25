@@ -18,7 +18,6 @@ export const userinfo = async (req: Request, res: Response) => {
         id: req.url.split("/info/")[1],
       },
     });
-    console.log(`req.url`, req.url);
     if (userData) {
       const { id, name, email, img, address } = userData;
       res.status(200).send({
@@ -105,7 +104,7 @@ export const signup = async (req: Request, res: Response) => {
         email,
         name,
         password: createhashedPassword(password, salt),
-        img: 0,
+        img: "src/controller/user.ts",
         address: "null",
       });
       res.status(201).send({ data: { id: newUser.id }, massege: "ok" });
@@ -121,7 +120,6 @@ export const edit = async (req: Request, res: Response) => {
     if (!tokenData) {
       res.status(403).send("Invalid access Token");
     } else {
-      console.log(`바디 들어왔다`, req.body);
       if (req.body.name) {
         await Users.update(
           { name: req.body.name },
@@ -163,7 +161,6 @@ export const editimg = async (req: Request, res: Response) => {
     if (!tokenData) {
       res.status(403).send("Invalid access Token");
     } else {
-      console.log(`req.file.path`, req.file);
       if (req.file.path) {
         await Users.update(
           {
@@ -202,9 +199,7 @@ export const editpassword = async (req: Request, res: Response) => {
           id: tokenData.id,
         },
       });
-      console.log(`req.body`, req.body);
       if (userData) {
-        console.log(`salt`, userData.salt);
         const hashedPsw = createhashedPassword(password, userData.salt);
         if (hashedPsw !== userData.password) {
           res.status(403).send("Invalid user password");
