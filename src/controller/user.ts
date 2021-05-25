@@ -1,4 +1,3 @@
-import { update } from "./comment";
 import { Request, Response } from "express";
 import Users from "../model/Users";
 
@@ -55,18 +54,18 @@ export const signin = async (req: Request, res: Response) => {
       const hashedPsw = createhashedPassword(password, userData.salt);
       if (hashedPsw !== userData.password) {
         res.status(403).send("Invalid user password");
+      } else {
+        const accessToken = generateAccessToken({
+          id: userData.id,
+          email: userData.email,
+        });
+        const refreshToken = generateRefreshToken({
+          id: userData.id,
+          email: userData.email,
+        });
+        sendRefreshToken(res, refreshToken);
+        sendAccessToken(res, 200, accessToken, userData.id);
       }
-      const accessToken = generateAccessToken({
-        id: userData.id,
-        email: userData.email,
-      });
-      const refreshToken = generateRefreshToken({
-        id: userData.id,
-        email: userData.email,
-      });
-      console.log(`유저 아이디`, userData.id);
-      sendRefreshToken(res, refreshToken);
-      sendAccessToken(res, 200, accessToken, userData.id);
     } else {
       res.status(403).send("Invalid user email");
     }
@@ -93,24 +92,24 @@ export const signup = async (req: Request, res: Response) => {
     if (!email || !password || !name) {
       res.status(422).send("insufficient parameters supplied");
     }
-
     const isUser = await Users.findOne({
       where: { email },
     });
 
     if (isUser) {
       res.status(409).send("email exists");
+    } else {
+      const salt = createSalt();
+      const newUser = await Users.create({
+        salt,
+        email,
+        name,
+        password: createhashedPassword(password, salt),
+        img: 0,
+        address: "null",
+      });
+      res.status(201).send({ data: { id: newUser.id }, massege: "ok" });
     }
-    const salt = createSalt();
-    const newUser = await Users.create({
-      salt,
-      email,
-      name,
-      password: createhashedPassword(password, salt),
-      img: 0,
-      address: "null",
-    });
-    res.status(201).send({ data: { id: newUser.id }, massege: "ok" });
   } catch (err) {
     res.status(422).send("insufficient parameters supplied");
   }
@@ -122,6 +121,7 @@ export const edit = async (req: Request, res: Response) => {
     if (!tokenData) {
       res.status(403).send("Invalid access Token");
     } else {
+      console.log(`바디 들어왔다`, req.body);
       if (req.body.name) {
         await Users.update(
           { name: req.body.name },
@@ -144,7 +144,13 @@ export const edit = async (req: Request, res: Response) => {
           }
         );
       }
-      res.status(200).send("uploadData");
+      res.status(200).send({
+        data: {
+          name: req.body.name,
+          address: req.body.address,
+        },
+        messeage: "uploadData",
+      });
     }
   } catch (e) {
     res.status(403).send("Invalid access Token");
@@ -181,6 +187,48 @@ export const editimg = async (req: Request, res: Response) => {
     }
   } catch (e) {
     res.status(403).send("no frofile");
+  }
+};
+
+export const editpassword = async (req: Request, res: Response) => {
+  try {
+    const { password, afterpassword } = req.body;
+    const tokenData: any = isAuthorized(req);
+    if (!tokenData) {
+      res.status(403).send("Invalid access Token");
+    } else {
+      const userData = await Users.findOne({
+        where: {
+          id: tokenData.id,
+        },
+      });
+      console.log(`req.body`, req.body);
+      if (userData) {
+        console.log(`salt`, userData.salt);
+        const hashedPsw = createhashedPassword(password, userData.salt);
+        if (hashedPsw !== userData.password) {
+          res.status(403).send("Invalid user password");
+        } else {
+          const salt = createSalt();
+          await Users.update(
+            {
+              password: createhashedPassword(afterpassword, salt),
+              salt: salt,
+            },
+            {
+              where: {
+                id: tokenData.id,
+              },
+            }
+          );
+          res.status(200).send({
+            message: "uploadData",
+          });
+        }
+      }
+    }
+  } catch (e) {
+    res.status(403).send("Fail edit password");
   }
 };
 
