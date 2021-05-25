@@ -104,7 +104,7 @@ export const signup = async (req: Request, res: Response) => {
         email,
         name,
         password: createhashedPassword(password, salt),
-        img: "src/controller/user.ts",
+        img: "/uploads/profile.png",
         address: "null",
       });
       res.status(201).send({ data: { id: newUser.id }, massege: "ok" });
@@ -162,9 +162,10 @@ export const editimg = async (req: Request, res: Response) => {
       res.status(403).send("Invalid access Token");
     } else {
       if (req.file.path) {
+        const filePath: string = req.file.path.split("public")[1];
         await Users.update(
           {
-            img: req.file.path,
+            img: filePath,
           },
           {
             where: {
@@ -174,7 +175,7 @@ export const editimg = async (req: Request, res: Response) => {
         );
         res.status(200).send({
           data: {
-            path: req.file.path,
+            path: filePath,
           },
           messeage: "Success change profile",
         });
