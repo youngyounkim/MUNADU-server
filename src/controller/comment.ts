@@ -80,3 +80,18 @@ export const update = async (req: Request, res: Response) => {
     res.status(404).json({ message: "Not Found" });
   }
 };
+
+export const rank = async (req: Request, res: Response) => {
+  try {
+    const data = await Comments.findAll({
+      order: [["createdAt", "DESC"]],
+      limit: 3,
+    });
+    res.status(201).json({ data: data, message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
+  }
+};
