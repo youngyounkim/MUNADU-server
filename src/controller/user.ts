@@ -104,7 +104,7 @@ export const signup = async (req: Request, res: Response) => {
         email,
         name,
         password: createhashedPassword(password, salt),
-        img: "src/controller/user.ts",
+        img: "/uploads/profile.png",
         address: "null",
       });
       res.status(201).send({ data: { id: newUser.id }, massege: "ok" });
