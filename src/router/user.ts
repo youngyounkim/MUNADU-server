@@ -20,8 +20,9 @@ userRouter.get("/info/:userid", user.userinfo);
 userRouter.post("/signin", user.signin);
 userRouter.post("/signup", user.signup);
 userRouter.get("/signout", user.signout);
-userRouter.put("/edit", user.signout);
+userRouter.put("/edit", user.edit);
 userRouter.put("/editimg", upload.single("image"), user.editimg);
+userRouter.put("/editpassword", user.editpassword);
 userRouter.delete("/userdelete", user.userdelete);
 
 export default userRouter;
