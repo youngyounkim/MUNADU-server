@@ -147,6 +147,7 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
+
 // ? 해당 무술의 평균 평점을 응답한다.
 export const average = async (req: Request, res: Response) => {
   try {
@@ -160,6 +161,22 @@ export const average = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({ data: averageData, message: "ok" });
+  } catch (err) {
+    console.log(`err`, err);
+    res.status(404).json({
+      message: "Not Found",
+    });
+  }
+};
+    
+    
+export const rank = async (req: Request, res: Response) => {
+  try {
+    const data = await Reviews.findAll({
+      order: [["createdAt", "DESC"]],
+      limit: 3,
+    });
+    res.status(201).json({ data: data, message: "ok" });
   } catch (err) {
     console.log(`err`, err);
     res.status(404).json({

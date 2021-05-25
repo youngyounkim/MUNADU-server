@@ -8,5 +8,6 @@ commentRouter.get("/user-list/:userid", comment.userList);
 commentRouter.post("/create", comment.create);
 commentRouter.delete("/delete", comment.deleteComment);
 commentRouter.put("/update", comment.update);
+commentRouter.get("/rank", comment.rank);
 
 export default commentRouter;
