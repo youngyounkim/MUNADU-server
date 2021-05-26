@@ -13,7 +13,7 @@ export interface ChannelsI {
   name: string;
   caption: string;
   url: string;
-  img: Buffer;
+  img: string;
 }
 
 @Table({
@@ -44,5 +44,5 @@ export default class Channels extends Model implements ChannelsI {
   @AllowNull(false)
   @NotEmpty
   @Column
-  img!: Buffer;
+  img!: string;
 }

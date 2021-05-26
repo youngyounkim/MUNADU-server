@@ -375,19 +375,19 @@ const channelSeed = async () => {
           name: "비디토리",
           caption: "비디토리 채널",
           url: "https://www.youtube.com/results?search_query=%EB%B9%84%EB%94%94%ED%86%A0%EB%A6%AC",
-          img: "Not yet",
+          img: "Viditory",
         },
         {
           name: "호구커플",
           caption: "호구커플 채널",
           url: "https://www.youtube.com/results?search_query=%ED%98%B8%EA%B5%AC%EC%BB%A4%ED%94%8C",
-          img: "Not yet",
+          img: "hoguCouple",
         },
         {
           name: "양감독 TV",
           caption: "양감독 TV 채널",
           url: "https://www.youtube.com/channel/UCKxLXXUTY6bt9Dxuu-pJ4Yw",
-          img: "Not yet",
+          img: "YangTV",
         },
       ]);
     } catch (e) {
