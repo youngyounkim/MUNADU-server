@@ -76,8 +76,17 @@ export const create = async (req: Request, res: Response) => {
       Martials_id: Martials_id,
       Users_id: Users_id,
     });
+    const user = await Users.findOne({
+      attributes: ["name"],
+      where: { id: data.Users_id },
+    });
     res.status(201).json({
-      data: { Reviews_id: data.id },
+      data: {
+        Reviews_id: data.id,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        users: { name: user?.name },
+      },
       message: "ok",
     });
   } catch (e) {
@@ -147,7 +156,6 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-
 // ? 해당 무술의 평균 평점을 응답한다.
 export const average = async (req: Request, res: Response) => {
   try {
@@ -168,8 +176,7 @@ export const average = async (req: Request, res: Response) => {
     });
   }
 };
-    
-    
+
 export const rank = async (req: Request, res: Response) => {
   try {
     const data = await Reviews.findAll({
