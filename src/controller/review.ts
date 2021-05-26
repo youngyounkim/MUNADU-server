@@ -4,6 +4,7 @@ import { isAuthorized } from "./auth";
 import Reviews from "../model/Reviews";
 import Users from "../model/Users";
 import sequelize from "sequelize";
+import Martials from "../model/Martials";
 
 // ? 해당 무술에 달린 모든 리뷰 리스트를 불러옵니다.
 export const martialList = async (req: Request, res: Response) => {
@@ -152,6 +153,18 @@ export const rank = async (req: Request, res: Response) => {
     const data = await Reviews.findAll({
       order: [["createdAt", "DESC"]],
       limit: 3,
+      include: [
+        {
+          model: Martials,
+          attributes: ["name"],
+          where: { id: sequelize.col("Martials_id") },
+        },
+        {
+          model: Users,
+          attributes: ["name"],
+          where: { id: sequelize.col("Users_id") },
+        },
+      ],
     });
     res.status(201).json({ data: data, message: "ok" });
   } catch (err) {
