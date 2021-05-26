@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import Comments from "../model/Comments";
+import Martials from "../model/Martials";
+import Users from "../model/Users";
+import sequelize from "sequelize";
 import { isAuthorized } from "./auth";
 
 export const martialList = async (req: Request, res: Response) => {
@@ -86,6 +89,18 @@ export const rank = async (req: Request, res: Response) => {
     const data = await Comments.findAll({
       order: [["createdAt", "DESC"]],
       limit: 3,
+      include: [
+        {
+          model: Martials,
+          attributes: ["name"],
+          where: { id: sequelize.col("Martials_id") },
+        },
+        {
+          model: Users,
+          attributes: ["name"],
+          where: { id: sequelize.col("Users_id") },
+        },
+      ],
     });
     res.status(201).json({ data: data, message: "ok" });
   } catch (err) {
