@@ -9,6 +9,11 @@ export const martialList = async (req: Request, res: Response) => {
   try {
     const commentsData = await Comments.findAll({
       where: { Martials_id: req.params.martialid },
+      include: {
+        model: Users,
+        attributes: ["name"],
+        where: { id: sequelize.col("Users_id") },
+      },
     });
     res.status(200).json({ data: commentsData, message: "ok" });
   } catch (e) {
@@ -37,9 +42,15 @@ export const create = async (req: Request, res: Response) => {
       Users_id: userid,
       Martials_id: martialid,
     });
-    res
-      .status(201)
-      .json({ data: { Comments_id: createData.id }, message: "created" });
+    const commentData = await Comments.findOne({
+      where: { id: createData.id },
+      include: {
+        model: Users,
+        attributes: ["name"],
+        where: { id: sequelize.col("Users_id") },
+      },
+    });
+    res.status(201).json({ data: commentData, message: "created" });
   } catch (e) {
     res.status(404).json({ message: "Not Found" });
   }

@@ -17,7 +17,6 @@ export const martialList = async (req: Request, res: Response) => {
         where: { id: sequelize.col("Users_id") },
       },
     });
-    console.log(`data`, data);
     res.status(200).json({ data: data, message: "ok" });
   } catch (err) {
     console.log(`err`, err);
