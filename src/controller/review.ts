@@ -17,7 +17,6 @@ export const martialList = async (req: Request, res: Response) => {
         where: { id: sequelize.col("Users_id") },
       },
     });
-    console.log(`data`, data);
     res.status(200).json({ data: data, message: "ok" });
   } catch (err) {
     console.log(`err`, err);
@@ -148,7 +147,6 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-
 // ? 해당 무술의 평균 평점을 응답한다.
 export const average = async (req: Request, res: Response) => {
   try {
@@ -169,8 +167,7 @@ export const average = async (req: Request, res: Response) => {
     });
   }
 };
-    
-    
+
 export const rank = async (req: Request, res: Response) => {
   try {
     const data = await Reviews.findAll({
