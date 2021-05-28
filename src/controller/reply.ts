@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import Reviews_Replies from "../model/Reviews_Replies";
+import Users from "../model/Users";
+import sequelize from "sequelize";
 import { isAuthorized } from "./auth";
 
 // ? 리뷰에 달린 댓글리스트 읽기
@@ -7,7 +9,14 @@ export const reviewList = async (req: Request, res: Response) => {
   try {
     const data = await Reviews_Replies.findAll({
       where: { Reviews_id: req.params.reviewid },
+      include: {
+        model: Users,
+        attributes: ["name"],
+        where: { id: sequelize.col("Users_id") },
+      },
+      order: [["createdAt", "DESC"]],
     });
+
     res.status(200).json({ data: data, message: "ok" });
   } catch (err) {
     console.log(`err`, err);
@@ -44,12 +53,28 @@ export const create = async (req: Request, res: Response) => {
   }
   try {
     const { comment, userId, reviewId } = req.body;
-    const data = await Reviews_Replies.create({
+    const resp = await Reviews_Replies.create({
       comment: comment,
       Users_id: userId,
       Reviews_id: reviewId,
     });
-    res.status(201).json({ data: data, message: "ok" });
+    const user = await Users.findOne({
+      attributes: ["name"],
+      where: { id: resp.Users_id },
+    });
+    console.log(`resp`, resp);
+    res.status(201).json({
+      data: {
+        id: resp.id,
+        comment: resp.comment,
+        Users_id: resp.Users_id,
+        Reviews_id: resp.Reviews_id,
+        updatedAt: resp.updatedAt,
+        createdAt: resp.createdAt,
+        users: { name: user?.name },
+      },
+      message: "ok",
+    });
   } catch (err) {
     console.log(`err`, err);
     res.status(404).json({
