@@ -14,6 +14,7 @@ export const martialList = async (req: Request, res: Response) => {
         attributes: ["name"],
         where: { id: sequelize.col("Users_id") },
       },
+      order: [["createdAt", "DESC"]],
     });
     res.status(200).json({ data: commentsData, message: "ok" });
   } catch (e) {
