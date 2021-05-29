@@ -80,11 +80,11 @@ export default class Reviews extends Model implements ReviewsI {
   reviews_replies!: Reviews_Replies[];
 
   @ForeignKey(() => Martials)
-  @Column
+  @Column({ onDelete: "cascade" })
   Martials_id!: number;
 
   @ForeignKey(() => Users)
-  @Column
+  @Column({ onDelete: "cascade" })
   Users_id!: number;
 
   @BelongsTo(() => Martials)
