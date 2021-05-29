@@ -33,14 +33,14 @@ export default class Reviews_Replies extends Model implements Reviews_RepliesI {
   comment!: string;
 
   @ForeignKey(() => Users)
-  @Column
+  @Column({ onDelete: "cascade" })
   Users_id!: number;
 
   @BelongsTo(() => Users)
   users!: Users;
 
   @ForeignKey(() => Reviews)
-  @Column
+  @Column({ onDelete: "cascade" })
   Reviews_id!: number;
 
   @BelongsTo(() => Reviews)

@@ -24,10 +24,10 @@ export default class Users_Martials extends Model implements Users_MartialsI {
   id?: number;
 
   @ForeignKey(() => Users)
-  @Column
+  @Column({ onDelete: "cascade" })
   Users_id!: number;
 
   @ForeignKey(() => Martials)
-  @Column
+  @Column({ onDelete: "cascade" })
   Martials_id!: number;
 }

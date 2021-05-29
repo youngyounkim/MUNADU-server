@@ -33,14 +33,14 @@ export default class Comments extends Model implements CommentsI {
   comment!: string;
 
   @ForeignKey(() => Users)
-  @Column
+  @Column({ onDelete: "cascade" })
   Users_id!: number;
 
   @BelongsTo(() => Users)
   users!: Users;
 
   @ForeignKey(() => Martials)
-  @Column
+  @Column({ onDelete: "cascade" })
   Martials_id!: number;
 
   @BelongsTo(() => Martials)
