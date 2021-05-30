@@ -13,7 +13,7 @@ export const martialList = async (req: Request, res: Response) => {
       where: { Martials_id: req.params.martialid },
       include: {
         model: Users,
-        attributes: ["name"],
+        attributes: ["name", "img"],
         where: { id: sequelize.col("Users_id") },
       },
     });
@@ -77,7 +77,7 @@ export const create = async (req: Request, res: Response) => {
       Users_id: Users_id,
     });
     const user = await Users.findOne({
-      attributes: ["name"],
+      attributes: ["name", "img"],
       where: { id: data.Users_id },
     });
     res.status(201).json({
@@ -85,7 +85,7 @@ export const create = async (req: Request, res: Response) => {
         Reviews_id: data.id,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
-        users: { name: user?.name },
+        users: { name: user?.name, img: user?.img },
       },
       message: "ok",
     });

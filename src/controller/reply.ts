@@ -32,7 +32,7 @@ export const allReplyList = async (req: Request, res: Response) => {
     const data = await Reviews_Replies.findAll({
       include: {
         model: Users,
-        attributes: ["name"],
+        attributes: ["name", "img"],
         where: { id: sequelize.col("Users_id") },
       },
       order: [["createdAt", "DESC"]],
