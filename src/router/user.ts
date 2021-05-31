@@ -24,5 +24,6 @@ userRouter.put("/edit", user.edit);
 userRouter.put("/editimg", upload.single("image"), user.editimg);
 userRouter.put("/editpassword", user.editpassword);
 userRouter.delete("/userdelete", user.userdelete);
+userRouter.post("/sociallogin", user.socialLogin);
 
 export default userRouter;

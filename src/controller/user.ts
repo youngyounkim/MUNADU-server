@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Users from "../model/Users";
-
 import {
   createSalt,
   generateAccessToken,
@@ -10,6 +9,73 @@ import {
   createhashedPassword,
   isAuthorized,
 } from "./auth";
+import { OAuth2Client } from "google-auth-library";
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const socialLogin = async (req: Request, res: Response) => {
+  try {
+    const { token, type } = req.body;
+    let payload: any;
+    // 소셜 로그인 분기. 입력받은 타입에 따라 payload를 다르게 뱉도록 함
+    switch (type) {
+      case 0:
+        const ticket = await client.verifyIdToken({
+          idToken: token,
+          audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        payload = ticket.getPayload();
+        break;
+      default:
+        payload = false;
+        break;
+    }
+    console.log(`payload2`, payload);
+    if (payload) {
+      const userData = await Users.findOne({
+        where: {
+          email: payload.email,
+        },
+      });
+      //로그인 분기. userData 여부에 따라 회원가입, 로그인 로직으로 이동
+      if (userData) {
+        const accessToken = generateAccessToken({
+          id: userData.id,
+          email: userData.email,
+        });
+        const refreshToken = generateRefreshToken({
+          id: userData.id,
+          email: userData.email,
+        });
+        sendRefreshToken(res, refreshToken);
+        sendAccessToken(res, 200, accessToken, userData.id);
+      } else {
+        const salt = createSalt();
+        const newUser = await Users.create({
+          salt,
+          email: payload.email,
+          name: payload.name,
+          password: createhashedPassword(payload.sub, salt),
+          img: payload.picture,
+          address: "null",
+        });
+        const accessToken = generateAccessToken({
+          id: newUser.id,
+          email: newUser.email,
+        });
+        const refreshToken = generateRefreshToken({
+          id: newUser.id,
+          email: newUser.email,
+        });
+        sendRefreshToken(res, refreshToken);
+        sendAccessToken(res, 200, accessToken, newUser.id);
+      }
+    } else {
+      res.status(403).send({ message: "AccessToken is unreliable" });
+    }
+  } catch (e) {
+    res.status(403).send({ message: "Fail login", err: e });
+  }
+};
 
 export const userinfo = async (req: Request, res: Response) => {
   try {
