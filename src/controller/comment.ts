@@ -11,7 +11,7 @@ export const martialList = async (req: Request, res: Response) => {
       where: { Martials_id: req.params.martialid },
       include: {
         model: Users,
-        attributes: ["name"],
+        attributes: ["name", "img"],
         where: { id: sequelize.col("Users_id") },
       },
       order: [["createdAt", "DESC"]],
@@ -47,7 +47,7 @@ export const create = async (req: Request, res: Response) => {
       where: { id: createData.id },
       include: {
         model: Users,
-        attributes: ["name"],
+        attributes: ["name", "img"],
         where: { id: sequelize.col("Users_id") },
       },
     });
