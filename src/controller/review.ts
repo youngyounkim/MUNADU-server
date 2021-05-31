@@ -28,13 +28,14 @@ export const martialList = async (req: Request, res: Response) => {
 
 // ? 로그인한 사용자가 남긴 리뷰리스트를 불러옵니다.
 export const userList = async (req: Request, res: Response) => {
-  if (!isAuthorized(req)) {
-    res.status(403).json({ message: "Invalid Access Token" });
-    return;
-  }
   try {
     const data = await Reviews.findAll({
       where: { Users_id: req.params.userid },
+      include: {
+        model: Users,
+        attributes: ["name", "img"],
+        where: { id: sequelize.col("Users_id") },
+      },
     });
     res.status(200).json({ data: data, message: "ok" });
   } catch (err) {
