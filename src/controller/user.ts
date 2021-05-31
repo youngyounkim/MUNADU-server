@@ -29,7 +29,7 @@ export const socialLogin = async (req: Request, res: Response) => {
         payload = false;
         break;
     }
-    console.log(`payload2`, payload);
+
     if (payload) {
       const userData = await Users.findOne({
         where: {
@@ -170,7 +170,7 @@ export const signup = async (req: Request, res: Response) => {
         email,
         name,
         password: createhashedPassword(password, salt),
-        img: "/uploads/profile.png",
+        img: `${process.env.URL}/uploads/profile.png`,
         address: "null",
       });
       res.status(201).send({ data: { id: newUser.id }, massege: "ok" });
@@ -231,7 +231,7 @@ export const editimg = async (req: Request, res: Response) => {
         const filePath: string = req.file.path.split("public")[1];
         await Users.update(
           {
-            img: filePath,
+            img: process.env.URL + filePath,
           },
           {
             where: {
@@ -241,7 +241,7 @@ export const editimg = async (req: Request, res: Response) => {
         );
         res.status(200).send({
           data: {
-            path: filePath,
+            path: process.env.URL + filePath,
           },
           messeage: "Success change profile",
         });
